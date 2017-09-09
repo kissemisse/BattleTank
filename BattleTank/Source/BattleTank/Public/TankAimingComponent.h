@@ -31,8 +31,6 @@ class BATTLETANK_API UTankAimingComponent : public UActorComponent
 
 public:	
 	// Sets default values for this component's properties
-	void AimAt(FVector);
-
 	UFUNCTION(BluePrintCallable, Category = "Setup")
 		void Initialize(UTankBarrel *_setBarrelReference, UTankTurrent *_setTurrentReference);
 
@@ -40,9 +38,11 @@ public:
 		void Fire();
 
 	UFUNCTION(BlueprintCallable) // this makes this method visable in the blue print
-		int GetAmmo() const;
+		int32 GetAmmo() const;
 
 	UTankAimingComponent();
+
+	void AimAt(FVector);
 
 	EFiringStatus GetFiringState() const;
 
@@ -67,6 +67,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 		float reloadTimeInSeconds = 3.0f;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+		int32 ammo = 3; // use int32 instead of int
+
 	UTankBarrel		*barrel = nullptr;
 	UTankTurrent	*turrent = nullptr;
 
@@ -75,6 +78,5 @@ private:
 
 	double lastFireTime = 0;
 
-	int ammo = 3;
 
 };

@@ -9,8 +9,19 @@ AProjectile::AProjectile()
 	PrimaryActorTick.bCanEverTick = true;
 	
 	// make component visable/derived in blueprint
+
+	collisionMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("CollisionsMesh")); // add component visible in BP
+	SetRootComponent(collisionMesh); // set it as root 
+	collisionMesh->SetNotifyRigidBodyCollision(true); // if the BP is copied this value will be copied as well as true (set as default)
+	collisionMesh->SetVisibility(false); // another default value
+
+	launchBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("LaunchBlast"));
+	launchBlast->AttachToComponent(collisionMesh, FAttachmentTransformRules::KeepWorldTransform);
+
 	projectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(FName("ProjectileComponent"));
 	projectileMovementComponent->bAutoActivate = false;
+
+
 }
 
 // Called when the game starts or when spawned

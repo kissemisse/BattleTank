@@ -52,7 +52,7 @@ void UTankAimingComponent::Initialize(UTankBarrel *_setBarrelReference, UTankTur
 	turrent = _setTurrentReference;
 }
 
-int UTankAimingComponent::GetAmmo() const { return ammo; }
+int32 UTankAimingComponent::GetAmmo() const { return ammo; }
 
 bool UTankAimingComponent::IsBarrelMoving()
 {
