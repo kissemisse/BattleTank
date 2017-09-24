@@ -30,9 +30,15 @@ private:
 	void AimTowardsCrosshair();
 	bool GetLookVectorHitLocation(FVector, FVector&) const;
 
+	virtual void SetPawn(APawn *_inPawn) override;
+
+	UFUNCTION()
+		void OnPossesedTankDeath();
+
 	bool GetSightRayHitLocation(FVector&) const; 
 
 	bool GetLookDirection(FVector2D, FVector&) const;
+
 
 	UPROPERTY(EditAnywhere)
 		float lineTraceRange = 1000000.0f; // 10km

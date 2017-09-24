@@ -3,6 +3,7 @@
 // forwarded declared instead
 #include "TankPlayerController.h"
 #include "Public/TankAimingComponent.h"
+#include "Public/Tank.h"
 
 void ATankPlayerController::BeginPlay()
 {
@@ -21,6 +22,25 @@ void ATankPlayerController::Tick(float _deltaTime)
 
 	AimTowardsCrosshair();
 }
+
+void ATankPlayerController::SetPawn(APawn *_inPawn)
+{
+	Super::SetPawn(_inPawn);
+	if (_inPawn)
+	{
+		auto PossesedTank = Cast<ATank>(_inPawn);
+		if (!ensure(PossesedTank)) { return; }
+
+		// subrice our local method to the tanks death event
+		PossesedTank->OnDeath.AddUniqueDynamic(this, &ATankPlayerController::OnPossesedTankDeath);
+	}
+}
+
+void ATankPlayerController::OnPossesedTankDeath()
+{
+	StartSpectatingOnly();
+}
+
 
 // Start the tank moving the barrel so that a shot would hit where crosshair intersects the world.
 void ATankPlayerController::AimTowardsCrosshair()
@@ -80,7 +100,7 @@ bool ATankPlayerController::GetLookVectorHitLocation( FVector _lookDirection, FV
 		hitResult,
 		startLocation,
 		endLocation,
-		ECollisionChannel::ECC_Visibility ))
+		ECollisionChannel::ECC_Camera ))
 		//params))
 	{
 		_hitLocation = hitResult.Location;

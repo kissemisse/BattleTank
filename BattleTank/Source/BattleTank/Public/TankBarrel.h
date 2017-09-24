@@ -25,4 +25,5 @@ private:
 	
 	UPROPERTY(EditDefaultsOnly, Category = Setup)
 		float minElevationDegree = 0.0f;
+
 };

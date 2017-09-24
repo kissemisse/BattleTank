@@ -2,7 +2,6 @@
 
 #include "Tank.h"
 
-
 // Sets default values
 ATank::ATank()
 {
@@ -10,20 +9,32 @@ ATank::ATank()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
-// Getter for tankAimingComponent
-// Couldnt get this to work after moving to forwarded classes and moving out the .h file
-//UTankAimingComponent *ATank::GetTankAimingComponent() // Created this myself outside course, might come back later to this (we want to fetch the aimingcomponent since its declared in this class
-//{
-//	return tankAimingComponent;
-//}
-
-// Getter for launchSpeed
-//float ATank::GetLaunchSpeed() {	return launchSpeed; }
-
 // Called when the game starts or when spawned
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
+
+	currentHealth = startingHealth;
+}
+
+float ATank::TakeDamage(float _damageAmount, struct FDamageEvent const &_damageEvent, AController *_eventInstigator, AActor *_damageCauser)
+{
+	int32 damagePoints = FPlatformMath::RoundToInt(_damageAmount); //convert incoming damage from float to int.
+	int32 damageToApply = FMath::Clamp<int32>(damagePoints, 0, currentHealth); // ensure we are not loweing under 0
+
+	currentHealth -= damageToApply; // decrease the damage from health
+
+	if (currentHealth <= 0)
+	{
+		OnDeath.Broadcast();
+	}
+
+	return _damageAmount;
+}
+
+float ATank::GetHealthPercent() const
+{
+	return (float)currentHealth / (float)startingHealth;
 }
 
 
